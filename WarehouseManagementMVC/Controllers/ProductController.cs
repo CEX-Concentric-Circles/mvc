@@ -14,14 +14,14 @@ public class ProductController : Controller
     }
 
     // GET: Products
-    [HttpGet]
+    [HttpGet("/product")]
     public async Task<IActionResult> Index()
     {
         return View(await _context.Products.ToListAsync());
     }
 
     // GET: Product/Details/5
-    [HttpGet("Details/{id}")]
+    [HttpGet("/product/detail/{id}")]
     public async Task<IActionResult> Details(int? id)
     {
         if (id == null)
@@ -40,7 +40,7 @@ public class ProductController : Controller
     }
 
     // POST: Product/Create
-    [HttpPost("Create")]
+    [HttpPost("/product/create")]
     public async Task<IActionResult> Create([Bind("Id,Name,Description,Quantity")] Product product)
     {
         if (ModelState.IsValid)
@@ -53,7 +53,7 @@ public class ProductController : Controller
     }
 
     // PATCH: Product/Edit/5
-    [HttpPatch("Edit/{id}")]
+    [HttpPatch("/product/edit/{id}")]
     public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,Quantity")] Product product)
     {
         if (id != product.Id)
@@ -70,22 +70,22 @@ public class ProductController : Controller
             }
             catch (DbUpdateConcurrencyException)
             {
-                // if (!ProductExists(product.Id))
-                // {
-                //     return NotFound();
-                // }
-                // else
-                // {
-                //     throw;
-                // }
+                if (!ProductExists(product.Id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
             }
             return RedirectToAction(nameof(Index));
         }
         return View(product);
     }
 
-    // DELETE: Product/5
-    [HttpDelete("{id}"), ActionName("Delete")]
+    // DELETE: Product/Delete/5
+    [HttpDelete("/product/delete/{id}"), ActionName("Delete")]
     public async Task<IActionResult> DeleteConfirmed(int id)
     {
         var product = await _context.Products.FindAsync(id);
@@ -94,8 +94,8 @@ public class ProductController : Controller
         return RedirectToAction(nameof(Index));
     }
 
-    // private bool ProductExists(int id)
-    // {
-    //     return _context.Products.Any(e => e.Id == id);
-    // }
+    private bool ProductExists(int id)
+    {
+        return _context.Products.Any(e => e.Id == id);
+    }
 }

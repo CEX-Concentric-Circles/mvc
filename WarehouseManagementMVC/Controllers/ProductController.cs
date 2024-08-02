@@ -1,67 +1,3 @@
-// using Microsoft.AspNetCore.Mvc;
-// using Microsoft.EntityFrameworkCore;
-// using WarehouseManagementMVC.Models;
-//
-// [ApiController]
-// [Route("[controller]")]
-// public class ProductController : Controller
-// {
-//     private readonly WmsContext _context;
-//
-//     public ProductController(WmsContext context)
-//     {
-//         _context = context;
-//     }
-//
-//     // GET: Products
-//     [HttpGet("/product")]
-//     public async Task<IActionResult> Index()
-//     {
-//         return Ok(await _context.Products.ToListAsync());
-//     }
-//
-//     // GET: Product/Details/5
-//     [HttpGet("/product/detail/{id}")]
-//     public async Task<IActionResult> Details(int? id)
-//     {
-//         if (id == null)
-//         {
-//             return NotFound();
-//         }
-//
-//         var product = await _context.Products
-//             .FirstOrDefaultAsync(m => m.Id == id);
-//         if (product == null)
-//         {
-//             return NotFound();
-//         }
-//
-//         return Ok(product);
-//     }
-//
-//     // POST: Product/Create
-//     [HttpPost("/product/create")]
-//     public async Task<IActionResult> Create([Bind("Id,Name,Description,Quantity")] Product product)
-//     {
-//         if (ModelState.IsValid)
-//         {
-//             _context.Add(product);
-//             await _context.SaveChangesAsync();
-//             return RedirectToAction(nameof(Index));
-//         }
-//         return Ok(product);
-//     }
-//
-//     // DELETE: Product/Delete/5
-//     [HttpDelete("/product/delete/{id}"), ActionName("Delete")]
-//     public async Task<IActionResult> DeleteConfirmed(int id)
-//     {
-//         var product = await _context.Products.FindAsync(id);
-//         _context.Products.Remove(product);
-//         await _context.SaveChangesAsync();
-//         return Ok(nameof(Index));
-//     }
-// }
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WarehouseManagementMVC.Data;
@@ -122,6 +58,7 @@ namespace WarehouseManagementMVC.Controllers
             // Update product properties with the new values
             findProduct.Name = product.Name;
             findProduct.Description = product.Description;
+            findProduct.Price = product.Price;
 
             _context.Entry(findProduct).State = EntityState.Modified;
 

@@ -16,5 +16,17 @@
         <member name="M:WarehouseManagementMVC.Migrations.AddCustomerToOrders.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
             <inheritdoc />
         </member>
+        <member name="T:WarehouseManagementMVC.Migrations.mig">
+            <inheritdoc />
+        </member>
+        <member name="M:WarehouseManagementMVC.Migrations.mig.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:WarehouseManagementMVC.Migrations.mig.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:WarehouseManagementMVC.Migrations.mig.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
     </members>
 </doc>

@@ -9,11 +9,10 @@ public class Order
     [Required]
     public DateTime OrderDate { get; set; }
 
-    [Required]
-    public int ProductId { get; set; }
+    public ICollection<OrderProduct> OrderProducts { get; set; } = new List<OrderProduct>();
+    
+    public int CustomerId { get; set; }
+    public Customer Customer { get; set; }
 
-    public Product Product { get; set; }
-
-    [Required]
-    public int Quantity { get; set; }
+    public string OrderStatus { get; set; }
 }

@@ -4,5 +4,17 @@
         <name>WarehouseManagementMVC</name>
     </assembly>
     <members>
+        <member name="T:WarehouseManagementMVC.Migrations.AddCustomerToOrders">
+            <inheritdoc />
+        </member>
+        <member name="M:WarehouseManagementMVC.Migrations.AddCustomerToOrders.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:WarehouseManagementMVC.Migrations.AddCustomerToOrders.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:WarehouseManagementMVC.Migrations.AddCustomerToOrders.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
     </members>
 </doc>

@@ -153,6 +153,7 @@ namespace WarehouseManagementTests
         {
             var product = new Product
             {
+                Id = 1,
                 Name = "Test Product",
                 Description = "Test Description"
             };
@@ -164,6 +165,13 @@ namespace WarehouseManagementTests
             var createdProduct = createdProductResult.Value as Product;
             Assert.NotNull(createdProduct);
             Assert.Equal("Test Product", createdProduct.Name);
+        }
+
+        [Fact]
+        public async Task GetProducts()
+        {
+            var products = await _productsController.GetProducts();
+            Console.WriteLine(products.Value);
         }
     }
 }

@@ -1,15 +1,10 @@
 // using Microsoft.AspNetCore.Mvc;
 // using Microsoft.EntityFrameworkCore;
-// using System;
-// using System.Collections.Generic;
-// using System.Linq;
-// using System.Threading.Tasks;
 // using WarehouseManagementMVC.Controllers;
 // using WarehouseManagementMVC.Data;
 // using WarehouseManagementMVC.Dtos;
 // using WarehouseManagementMVC.Models;
 // using Xunit;
-// using Xunit.Abstractions;
 //
 // namespace WarehouseManagementTests
 // {
@@ -48,6 +43,7 @@
 //             };
 //
 //             var result = await _productsController.PostProduct(product) as ActionResult<Product>;
+//             Console.WriteLine(result);
 //             Assert.NotNull(result);
 //             var createdProduct = result.Value as Product;
 //             Assert.NotNull(createdProduct);

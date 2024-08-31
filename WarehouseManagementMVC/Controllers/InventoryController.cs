@@ -1,6 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using WarehouseManagementMVC.Data;
 using WarehouseManagementMVC.Dtos;
 using WarehouseManagementMVC.Models;
 
@@ -10,69 +8,50 @@ namespace WarehouseManagementMVC.Controllers
     [ApiController]
     public class InventoriesController : ControllerBase
     {
-        private readonly WmsContext _context;
+        private readonly IInventoryService _inventoryService;
+        private readonly IProductService _productService;
 
-        public InventoriesController(WmsContext context)
+        public InventoriesController(IInventoryService inventoryService, IProductService productService)
         {
-            _context = context;
+            _inventoryService = inventoryService;
+            _productService = productService;
         }
 
         // GET: api/Inventories
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Inventory>>> GetInventories()
         {
-            return await _context.Inventories.ToListAsync();
+            var inventories = await _inventoryService.GetInventoriesAsync();
+            return Ok(inventories);
         }
 
         // GET: api/Inventories/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Inventory>> GetInventory(int id)
         {
-            var inventory = await _context.Inventories.SingleOrDefaultAsync(i => i.Id == id);
+            var inventory = await _inventoryService.GetInventoryByIdAsync(id);
 
             if (inventory == null)
             {
                 return NotFound();
             }
 
-            return inventory;
+            return Ok(inventory);
         }
 
         // PUT: api/Inventories/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutInventory(int id, InventoryPutDto inventory)
+        public async Task<IActionResult> PutInventory(int id, InventoryPutDto inventoryDto)
         {
-            if (id == null)
+            if (id <= 0)
             {
-                return BadRequest();
+                return BadRequest("Invalid inventory ID.");
             }
-            var findInventory = await _context.Inventories.SingleOrDefaultAsync(i => i.Id == id);
 
-            if (findInventory == null)
+            var result = await _inventoryService.UpdateInventoryAsync(id, inventoryDto);
+            if (!result)
             {
                 return NotFound();
-            }
-            _context.Inventories.Update(new Inventory
-            {
-                Id = id,
-                ProductId = findInventory.ProductId,
-                Quantity = inventory.Quantity
-            });
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!InventoryExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
             }
 
             return NoContent();
@@ -80,57 +59,37 @@ namespace WarehouseManagementMVC.Controllers
 
         // POST: api/Inventories
         [HttpPost]
-        public async Task<ActionResult<Inventory>> PostInventory(InventoryPostDto inventory)
+        public async Task<ActionResult<Inventory>> PostInventory(InventoryPostDto inventoryDto)
         {
-            // Check if the product exists
-            var findProduct = await _context.Products.SingleOrDefaultAsync(i => i.Id == inventory.ProductId);
-    
-            if (findProduct == null)
-            {
-                return NotFound();
-            }
-            
-            var findInventory = await _context.Inventories.FirstOrDefaultAsync(i => i.ProductId == inventory.ProductId);
+            var createdInventory = await _inventoryService.CreateInventoryAsync(inventoryDto);
 
-            if (findInventory != null)
+            if (createdInventory == null)
             {
-                return Content($"Inventory for ProductID {inventory.ProductId} already Exist");
+                var productExists = _productService.ProductExists(inventoryDto.ProductId);
+                if (!productExists)
+                {
+                    return NotFound($"Product with ID {inventoryDto.ProductId} does not exist.");
+                }
+                else
+                {
+                    return Conflict($"Inventory for ProductID {inventoryDto.ProductId} already exists.");
+                }
             }
-            
-            // Create a new Inventory entry
-            var newInventory = new Inventory
-            {
-                ProductId = inventory.ProductId,
-                Quantity = inventory.Quantity
-            };
-    
-            // Add the new inventory to the context
-            _context.Inventories.Add(newInventory);
-            await _context.SaveChangesAsync();
-    
-            // Return a response with the newly created inventory
-            return CreatedAtAction(nameof(GetInventory), new { id = newInventory.Id }, newInventory);
+
+            return CreatedAtAction(nameof(GetInventory), new { id = createdInventory.Id }, createdInventory);
         }
 
         // DELETE: api/Inventories/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteInventory(int id)
         {
-            var inventory = await _context.Inventories.FindAsync(id);
-            if (inventory == null)
+            var result = await _inventoryService.DeleteInventoryAsync(id);
+            if (!result)
             {
                 return NotFound();
             }
 
-            _context.Inventories.Remove(inventory);
-            await _context.SaveChangesAsync();
-
             return NoContent();
-        }
-
-        private bool InventoryExists(int id)
-        {
-            return _context.Inventories.Any(e => e.Id == id);
         }
     }
 }

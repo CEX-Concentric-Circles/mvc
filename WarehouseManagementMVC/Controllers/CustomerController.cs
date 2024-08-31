@@ -1,87 +1,57 @@
 using Microsoft.AspNetCore.Mvc;
 using WarehouseManagementMVC.Models;
-using Microsoft.EntityFrameworkCore;
-using WarehouseManagementMVC.Data;
 
-namespace YourMainProject.Controllers
+namespace WarehouseManagementMVC.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     public class CustomersController : ControllerBase
     {
-        private readonly WmsContext _context;
+        private readonly ICustomerService _customerService;
 
-        public CustomersController(WmsContext context)
+        public CustomersController(ICustomerService customerService)
         {
-            _context = context;
+            _customerService = customerService;
         }
 
         // GET: api/Customers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Customer>>> GetCustomers()
         {
-            return await _context.Customers.ToListAsync();
+            var customers = await _customerService.GetCustomersAsync();
+            return Ok(customers);
         }
 
         // GET: api/Customers/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Customer>> GetCustomer(int id)
         {
-            var customer = await _context.Customers.FindAsync(id);
+            var customer = await _customerService.GetCustomerByIdAsync(id);
 
             if (customer == null)
             {
                 return NotFound();
             }
 
-            return customer;
+            return Ok(customer);
         }
 
         // POST: api/Customers
         [HttpPost]
         public async Task<ActionResult<Customer>> PostCustomer(Customer customer)
         {
-            _context.Customers.Add(customer);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetCustomer", new { id = customer.Id }, customer);
+            var createdCustomer = await _customerService.CreateCustomerAsync(customer);
+            return CreatedAtAction(nameof(GetCustomer), new { id = createdCustomer.Id }, createdCustomer);
         }
 
         // PUT: api/Customers/5
         [HttpPut("{id}")]
         public async Task<IActionResult> PutCustomer(int id, Customer customer)
         {
-            if (id == null)
+            var result = await _customerService.UpdateCustomerAsync(id, customer);
+            if (!result)
             {
-                return BadRequest();
-            }
-
-            // Find the existing product
-            var findCustomer = await _context.Customers.FindAsync(id);
-
-            if (findCustomer == null)
-            {
-                return NotFound();
-            }
-
-            // Update product properties with the new values
-            findCustomer.Name = customer.Name;
-            findCustomer.Email = customer.Email;
-            _context.Entry(findCustomer).State = EntityState.Modified;
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!CustomerExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                return NotFound("Customer not found or unable to update.");
             }
 
             return NoContent();
@@ -91,21 +61,13 @@ namespace YourMainProject.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCustomer(int id)
         {
-            var customer = await _context.Customers.FindAsync(id);
-            if (customer == null)
+            var result = await _customerService.DeleteCustomerAsync(id);
+            if (!result)
             {
-                return NotFound();
+                return NotFound("Customer not found.");
             }
 
-            _context.Customers.Remove(customer);
-            await _context.SaveChangesAsync();
-
             return NoContent();
-        }
-
-        private bool CustomerExists(int id)
-        {
-            return _context.Customers.Any(e => e.Id == id);
         }
     }
 }

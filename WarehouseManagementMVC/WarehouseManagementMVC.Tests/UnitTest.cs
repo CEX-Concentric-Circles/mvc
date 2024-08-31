@@ -3,9 +3,6 @@ using Xunit;
 using WarehouseManagementMVC.Data;
 using WarehouseManagementMVC.Models;
 using Microsoft.EntityFrameworkCore;
-using System.Threading.Tasks;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace WarehouseManagementTests
 {
@@ -15,7 +12,6 @@ namespace WarehouseManagementTests
 
         public WarehouseManagementTests()
         {
-            // Set up DbContext using in-memory database
             var options = new DbContextOptionsBuilder<WmsContext>()
                 .UseInMemoryDatabase(databaseName: "TestDatabase")
                 .Options;
@@ -26,7 +22,6 @@ namespace WarehouseManagementTests
         [Fact]
         public async Task FullProcessTest()
         {
-            // Run through the entire process from creating a product to processing an order
             var product = await CreateProduct();
             var inventory = await AddProductToInventory(product);
             var order = await CreateOrder(product);

@@ -1,6 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using WarehouseManagementMVC.Data;
+using WarehouseManagementMVC.Models;
+using WarehouseManagementMVC.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,7 +27,10 @@ builder.Services.AddSwaggerGen(c =>
     var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
     c.IncludeXmlComments(xmlPath);
 });
-
+builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<IOrderService, OrderService>();
+builder.Services.AddScoped<IInventoryService, InventoryService>();
+builder.Services.AddScoped<ICustomerService, CustomerService>();
 var app = builder.Build();
 
 // Initialize the database.

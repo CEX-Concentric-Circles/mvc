@@ -4,6 +4,7 @@
 // using WarehouseManagementMVC.Data;
 // using WarehouseManagementMVC.Dtos;
 // using WarehouseManagementMVC.Models;
+// using WarehouseManagementMVC.Services;
 // using Xunit;
 //
 // namespace WarehouseManagementTests
@@ -11,6 +12,9 @@
 //     public class WarehouseManagementIntegrationTests
 //     {
 //         private readonly WmsContext _context;
+//         private readonly ProductService _productService;
+//         private readonly InventoryService _inventoryService;
+//         private readonly OrderService _orderService;
 //         private readonly ProductsController _productsController;
 //         private readonly InventoriesController _inventoryController;
 //         private readonly OrdersController _ordersController;
@@ -25,11 +29,16 @@
 //
 //             // Ensure the database is created
 //             _context.Database.EnsureCreated();
+//             
+//             // Initialize services
+//             _productService = new ProductService(_context);
+//             _inventoryService = new InventoryService(_context);
+//             _orderService = new OrderService(_context);
 //
 //             // Initialize controllers
-//             _productsController = new ProductsController(_context);
-//             _inventoryController = new InventoriesController(_context);
-//             _ordersController = new OrdersController(_context);
+//             _productsController = new ProductsController(_productService);
+//             _inventoryController = new InventoriesController(_inventoryService, _productService);
+//             _ordersController = new OrdersController(_orderService);
 //         }
 //
 //         [Fact]
@@ -43,7 +52,7 @@
 //             };
 //
 //             var result = await _productsController.PostProduct(product) as ActionResult<Product>;
-//             Console.WriteLine(result);
+//            
 //             Assert.NotNull(result);
 //             var createdProduct = result.Value as Product;
 //             Assert.NotNull(createdProduct);
@@ -89,3 +98,74 @@
 //         }
 //     }
 // }
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using WarehouseManagementMVC.Controllers;
+using WarehouseManagementMVC.Data;
+using WarehouseManagementMVC.Dtos;
+using WarehouseManagementMVC.Models;
+using WarehouseManagementMVC.Services;
+using Xunit;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using System;
+using Microsoft.Extensions.DependencyInjection;
+
+namespace WarehouseManagementTests
+{
+    public class WarehouseManagementIntegrationTests
+    {
+        private readonly WmsContext _context;
+        private readonly IProductService _productService;
+        private readonly IInventoryService _inventoryService;
+        private readonly IOrderService _orderService;
+        private readonly ProductsController _productsController;
+        private readonly InventoriesController _inventoryController;
+        private readonly OrdersController _ordersController;
+
+        public WarehouseManagementIntegrationTests()
+        {
+            var serviceProvider = new ServiceCollection()
+                .AddEntityFrameworkInMemoryDatabase()
+                .BuildServiceProvider();
+
+            var options = new DbContextOptionsBuilder<WmsContext>()
+                .UseInMemoryDatabase(databaseName: "mydatabase")
+                .UseInternalServiceProvider(serviceProvider)
+                .Options;
+
+            _context = new WmsContext(options);
+            _context.Database.EnsureCreated();
+
+            // Initialize services
+            _productService = new ProductService(_context);
+            _inventoryService = new InventoryService(_context);
+            _orderService = new OrderService(_context);
+
+            // Initialize controllers
+            _productsController = new ProductsController(_productService);
+            _inventoryController = new InventoriesController(_inventoryService, _productService);
+            _ordersController = new OrdersController(_orderService);
+        }
+
+        [Fact]
+        public async Task CreateProduct_AddToInventory()
+        {
+            var product = new Product
+            {
+                Name = "Test Product",
+                Description = "Test Description"
+            };
+        
+            var productResult = await _productsController.PostProduct(product);
+            Assert.IsType<CreatedAtActionResult>(productResult.Result);
+        
+            var createdProductResult = productResult.Result as CreatedAtActionResult;
+            var createdProduct = createdProductResult.Value as Product;
+            Assert.NotNull(createdProduct);
+            Assert.Equal("Test Product", createdProduct.Name);
+        }
+    }
+}
+
+

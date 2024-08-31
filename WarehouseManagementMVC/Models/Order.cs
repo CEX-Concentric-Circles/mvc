@@ -12,7 +12,6 @@ public class Order
     public ICollection<OrderProduct> OrderProducts { get; set; } = new List<OrderProduct>();
     
     public int CustomerId { get; set; }
-    public Customer Customer { get; set; }
 
     public string OrderStatus { get; set; }
 }

@@ -19,7 +19,6 @@ namespace WarehouseManagementMVC.Services
             var orders = await _context.Orders
                 .Include(o => o.OrderProducts)
                 .ThenInclude(op => op.Product)
-                .Include(oc => oc.Customer)
                 .ToListAsync();
 
             return orders.Select(o => new OrderGetDto
@@ -46,7 +45,6 @@ namespace WarehouseManagementMVC.Services
             var order = await _context.Orders
                 .Include(o => o.OrderProducts)
                 .ThenInclude(op => op.Product)
-                .Include(oc => oc.Customer)
                 .FirstOrDefaultAsync(o => o.Id == id);
 
             if (order == null)
@@ -81,12 +79,6 @@ namespace WarehouseManagementMVC.Services
                 OrderStatus = orderDto.OrderStatus,
                 CustomerId = orderDto.CustomerId
             };
-
-            var findCustomer = await _context.Customers.SingleOrDefaultAsync(i => i.Id == orderDto.CustomerId);
-            if (findCustomer == null)
-            {
-                return null; // Customer not found
-            }
 
             foreach (var opDto in orderDto.OrderProducts)
             {
@@ -125,7 +117,6 @@ namespace WarehouseManagementMVC.Services
                     ProductId = op.ProductId,
                     Quantity = op.Quantity
                 }).ToList(),
-                CustomerId = findCustomer.Id
             };
         }
 

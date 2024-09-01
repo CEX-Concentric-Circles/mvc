@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using WarehouseManagementMVC.Dtos;
 using WarehouseManagementMVC.Models;
 
 namespace WarehouseManagementMVC.Controllers
@@ -56,7 +57,7 @@ namespace WarehouseManagementMVC.Controllers
 
         // POST: api/Products
         [HttpPost]
-        public async Task<ActionResult<Product>> PostProduct(Product product)
+        public async Task<ActionResult<Product>> PostProduct(ProductDto product)
         {
             var createdProduct = await _productService.CreateProductAsync(product);
             return CreatedAtAction(nameof(GetProduct), new { id = createdProduct.Id }, createdProduct);

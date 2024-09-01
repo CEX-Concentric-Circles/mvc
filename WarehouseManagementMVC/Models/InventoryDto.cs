@@ -1,5 +1,4 @@
 using System.ComponentModel.DataAnnotations;
-using WarehouseManagementMVC.Models;
 
 namespace WarehouseManagementMVC.Dtos
 {

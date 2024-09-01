@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using WarehouseManagementMVC.Data;
+using WarehouseManagementMVC.Dtos;
 using WarehouseManagementMVC.Models;
 
 namespace WarehouseManagementMVC.Services
@@ -23,14 +24,21 @@ namespace WarehouseManagementMVC.Services
             return await _context.Customers.FindAsync(id);
         }
 
-        public async Task<Customer> CreateCustomerAsync(Customer customer)
+        public async Task<Customer> CreateCustomerAsync(CustomerDto customerDto)
         {
+            var customer = new Customer
+            {
+                Id = customerDto.Id,
+                Name = customerDto.Name,
+                Email = customerDto.Email
+            };
+            
             _context.Customers.Add(customer);
             await _context.SaveChangesAsync();
             return customer;
         }
 
-        public async Task<bool> UpdateCustomerAsync(int id, Customer customer)
+        public async Task<bool> UpdateCustomerAsync(int id, CustomerDto customer)
         {
             var findCustomer = await _context.Customers.FindAsync(id);
             if (findCustomer == null)

@@ -236,3 +236,11 @@
 /Users/tariqhussainmagsi/RiderProjects/WarehouseManagementMVC/WarehouseManagementMVC/bin/Debug/net8.0/zh-Hant/Microsoft.TestPlatform.CrossPlatEngine.resources.dll
 /Users/tariqhussainmagsi/RiderProjects/WarehouseManagementMVC/WarehouseManagementMVC/bin/Debug/net8.0/zh-Hant/Microsoft.VisualStudio.TestPlatform.Common.resources.dll
 /Users/tariqhussainmagsi/RiderProjects/WarehouseManagementMVC/WarehouseManagementMVC/bin/Debug/net8.0/FluentAssertions.dll
+/Users/tariqhussainmagsi/RiderProjects/WarehouseManagementMVC/WarehouseManagementMVC/bin/Debug/net8.0/StronglyConnectedComponents.dll
+/Users/tariqhussainmagsi/RiderProjects/WarehouseManagementMVC/WarehouseManagementMVC/bin/Debug/net8.0/JetBrains.Annotations.dll
+/Users/tariqhussainmagsi/RiderProjects/WarehouseManagementMVC/WarehouseManagementMVC/bin/Debug/net8.0/Mono.Cecil.Mdb.dll
+/Users/tariqhussainmagsi/RiderProjects/WarehouseManagementMVC/WarehouseManagementMVC/bin/Debug/net8.0/Mono.Cecil.Pdb.dll
+/Users/tariqhussainmagsi/RiderProjects/WarehouseManagementMVC/WarehouseManagementMVC/bin/Debug/net8.0/Mono.Cecil.Rocks.dll
+/Users/tariqhussainmagsi/RiderProjects/WarehouseManagementMVC/WarehouseManagementMVC/bin/Debug/net8.0/Mono.Cecil.dll
+/Users/tariqhussainmagsi/RiderProjects/WarehouseManagementMVC/WarehouseManagementMVC/bin/Debug/net8.0/ArchUnitNET.dll
+/Users/tariqhussainmagsi/RiderProjects/WarehouseManagementMVC/WarehouseManagementMVC/bin/Debug/net8.0/ArchUnitNET.xUnit.dll

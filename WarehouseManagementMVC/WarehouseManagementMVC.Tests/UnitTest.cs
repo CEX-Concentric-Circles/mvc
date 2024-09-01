@@ -23,7 +23,6 @@ namespace WarehouseManagementTests
         public async Task FullProcessTest()
         {
             var product = await CreateProduct();
-            var inventory = await AddProductToInventory(product);
             var order = await CreateOrder(product);
             await ProcessOrder(order, product);
         }
@@ -42,23 +41,6 @@ namespace WarehouseManagementTests
             Assert.NotNull(createdProduct);
 
             return createdProduct;
-        }
-
-        private async Task<Inventory> AddProductToInventory(Product product)
-        {
-            var inventory = new Inventory
-            {
-                ProductId = product.Id,
-                Quantity = 50
-            };
-            _context.Inventories.Add(inventory);
-            await _context.SaveChangesAsync();
-
-            var addedInventory = await _context.Inventories.FirstOrDefaultAsync(i => i.ProductId == product.Id);
-            Assert.NotNull(addedInventory);
-            Assert.Equal(50, addedInventory.Quantity);
-
-            return addedInventory;
         }
 
         private async Task<Order> CreateOrder(Product product)
@@ -87,14 +69,8 @@ namespace WarehouseManagementTests
 
         private async Task ProcessOrder(Order order, Product product)
         {
-            var productToUpdate = await _context.Products.FindAsync(product.Id);
             var orderProduct = order.OrderProducts.First();
-            var inventoryToUpdate = await _context.Inventories.FirstOrDefaultAsync(i => i.ProductId == productToUpdate.Id);
-            inventoryToUpdate.Quantity -= orderProduct.Quantity;
-            await _context.SaveChangesAsync();
-            
-            var updatedInventory = await _context.Inventories.FirstOrDefaultAsync(i => i.ProductId == product.Id);
-            Assert.Equal(40, updatedInventory.Quantity); // Assuming the order quantity was 10
+            Assert.NotNull(orderProduct); 
         }
     }
 }

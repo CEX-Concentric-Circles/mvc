@@ -29,7 +29,6 @@ builder.Services.AddSwaggerGen(c =>
 });
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IOrderService, OrderService>();
-builder.Services.AddScoped<IInventoryService, InventoryService>();
 builder.Services.AddScoped<ICustomerService, CustomerService>();
 var app = builder.Build();
 

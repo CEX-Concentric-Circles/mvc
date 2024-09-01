@@ -61,13 +61,6 @@ namespace WarehouseManagementMVC.Services
             _context.Products.Add(product);
             await _context.SaveChangesAsync();
 
-            var inventory = await _context.Inventories.SingleOrDefaultAsync(i => i.ProductId == product.Id);
-            if (inventory == null)
-            {
-                _context.Inventories.Add(new Inventory { ProductId = product.Id });
-                await _context.SaveChangesAsync();
-            }
-
             return product;
         }
 
@@ -75,13 +68,7 @@ namespace WarehouseManagementMVC.Services
         {
             var product = await _context.Products.FindAsync(id);
             if (product == null) return false;
-
-            var inventory = await _context.Inventories.SingleOrDefaultAsync(i => i.ProductId == id);
-            if (inventory != null)
-            {
-                _context.Inventories.Remove(inventory);
-            }
-
+            
             _context.Products.Remove(product);
             await _context.SaveChangesAsync();
 

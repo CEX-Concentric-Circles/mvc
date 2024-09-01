@@ -35,6 +35,11 @@
     <ItemGroup>
       <Compile Remove="Controllers\HomeController.cs" />
       <Compile Remove="Models\ErrorViewModel.cs" />
+      <Compile Remove="Models\Inventory.cs" />
+      <Compile Remove="Models\InventoryDto.cs" />
+      <Compile Remove="Models\IInventoryService.cs" />
+      <Compile Remove="Services\InventoryService.cs" />
+      <Compile Remove="Controllers\InventoryController.cs" />
     </ItemGroup>
 
 

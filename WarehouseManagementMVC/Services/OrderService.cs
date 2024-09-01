@@ -90,21 +90,6 @@ namespace WarehouseManagementMVC.Services
 
             foreach (var opDto in orderDto.OrderProducts)
             {
-                var inventory = await _context.Inventories.SingleOrDefaultAsync(i => i.ProductId == opDto.ProductId);
-
-                if (inventory == null)
-                {
-                    return null; // Product not found
-                }
-
-                if (inventory.Quantity < opDto.Quantity)
-                {
-                    return null; // Insufficient quantity
-                }
-
-                inventory.Quantity -= opDto.Quantity;
-                _context.Entry(inventory).State = EntityState.Modified;
-
                 order.OrderProducts.Add(new OrderProduct
                 {
                     ProductId = opDto.ProductId,
@@ -144,24 +129,6 @@ namespace WarehouseManagementMVC.Services
 
             foreach (var opDto in orderDto.OrderProducts)
             {
-                var inventory = await _context.Inventories.SingleOrDefaultAsync(i => i.ProductId == opDto.ProductId);
-
-                if (inventory == null)
-                {
-                    return false;
-                }
-
-                if (inventory.Quantity < opDto.Quantity)
-                {
-                    return false;
-                }
-
-                var existingQuantity = existingOrder.OrderProducts
-                    .FirstOrDefault(op => op.ProductId == opDto.ProductId)?.Quantity ?? 0;
-
-                inventory.Quantity -= opDto.Quantity - existingQuantity;
-                _context.Entry(inventory).State = EntityState.Modified;
-
                 _context.OrderProducts.Add(new OrderProduct
                 {
                     OrderId = id,
@@ -187,17 +154,6 @@ namespace WarehouseManagementMVC.Services
             if (order == null)
             {
                 return false;
-            }
-
-            foreach (var op in order.OrderProducts)
-            {
-                var inventory = await _context.Inventories.SingleOrDefaultAsync(i => i.ProductId == op.ProductId);
-
-                if (inventory != null)
-                {
-                    inventory.Quantity += op.Quantity;
-                    _context.Entry(inventory).State = EntityState.Modified;
-                }
             }
 
             _context.OrderProducts.RemoveRange(order.OrderProducts);

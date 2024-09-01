@@ -117,10 +117,8 @@ namespace WarehouseManagementTests
     {
         private readonly WmsContext _context;
         private readonly IProductService _productService;
-        private readonly IInventoryService _inventoryService;
         private readonly IOrderService _orderService;
         private readonly ProductsController _productsController;
-        private readonly InventoriesController _inventoryController;
         private readonly OrdersController _ordersController;
 
         public WarehouseManagementIntegrationTests()
@@ -139,12 +137,10 @@ namespace WarehouseManagementTests
 
             // Initialize services
             _productService = new ProductService(_context);
-            _inventoryService = new InventoryService(_context);
             _orderService = new OrderService(_context);
 
             // Initialize controllers
             _productsController = new ProductsController(_productService);
-            _inventoryController = new InventoriesController(_inventoryService, _productService);
             _ordersController = new OrdersController(_orderService);
         }
 

@@ -151,7 +151,7 @@ namespace WarehouseManagementTests
         [Fact]
         public async Task CreateProduct_AddToInventory()
         {
-            var product = new Product
+            var product = new ProductDto()
             {
                 Id = 1,
                 Name = "Test Product",

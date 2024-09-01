@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using WarehouseManagementMVC.Dtos;
 using WarehouseManagementMVC.Models;
 
 namespace WarehouseManagementMVC.Controllers
@@ -38,17 +39,33 @@ namespace WarehouseManagementMVC.Controllers
 
         // POST: api/Customers
         [HttpPost]
-        public async Task<ActionResult<Customer>> PostCustomer(Customer customer)
+        public async Task<ActionResult<Customer>> PostCustomer(CustomerDto customerDto)
         {
-            var createdCustomer = await _customerService.CreateCustomerAsync(customer);
+            if (customerDto == null)
+            {
+                return BadRequest("Customer data is null.");
+            }
+            
+            var createdCustomer = await _customerService.CreateCustomerAsync(customerDto);
+            
+            if (createdCustomer == null)
+            {
+                return Conflict("Could not create the customer.");
+            }
+            
             return CreatedAtAction(nameof(GetCustomer), new { id = createdCustomer.Id }, createdCustomer);
         }
 
         // PUT: api/Customers/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCustomer(int id, Customer customer)
+        public async Task<IActionResult> PutCustomer(int id, CustomerDto customerDto)
         {
-            var result = await _customerService.UpdateCustomerAsync(id, customer);
+            if (customerDto == null)
+            {
+                return BadRequest("Customer data is null.");
+            }
+            
+            var result = await _customerService.UpdateCustomerAsync(id, customerDto);
             if (!result)
             {
                 return NotFound("Customer not found or unable to update.");

@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using WarehouseManagementMVC.Data;
+using WarehouseManagementMVC.Dtos;
 using WarehouseManagementMVC.Models;
 
 namespace WarehouseManagementMVC.Services
@@ -47,8 +48,16 @@ namespace WarehouseManagementMVC.Services
             return true;
         }
 
-        public async Task<Product> CreateProductAsync(Product product)
+        public async Task<Product> CreateProductAsync(ProductDto productDto)
         {
+            var product = new Product()
+            {
+                Id = productDto.Id,
+                Name = productDto.Name,
+                Description = productDto.Description,
+                Price = productDto.Price
+            };
+            
             _context.Products.Add(product);
             await _context.SaveChangesAsync();
 

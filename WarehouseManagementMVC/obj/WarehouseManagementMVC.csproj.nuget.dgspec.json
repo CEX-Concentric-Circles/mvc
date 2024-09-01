@@ -85,6 +85,14 @@
               "target": "Package",
               "version": "[6.6.2, )"
             },
+            "TngTech.ArchUnitNET": {
+              "target": "Package",
+              "version": "[0.8.0, )"
+            },
+            "TngTech.ArchUnitNET.xUnit": {
+              "target": "Package",
+              "version": "[0.8.0, )"
+            },
             "xunit": {
               "target": "Package",
               "version": "[2.9.0, )"
